@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jetway: triage for airline customer care</title>
+<meta name="description" content="Routes airline customer tweets to the right team, hands uncertain ones to people, and drafts replies grounded in policy.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Overpass+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f7f9; --surface: #fff; --ink: #142033; --soft: #586477; --rule: #d9dee5;
+    --board: #0f1a2b; --flap: #1a2740; --amber: #f5b841; --amber-soft: #c9952f; --ok: #2c7a5b; --bad: #b3263e;
+    color-scheme: light; box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #0c121c; --surface: #141c29; --ink: #e6ebf2; --soft: #9aa6b8; --rule: #263244;
+            --board: #070c15; --flap: #121c2d; --ok: #59b88f; --bad: #e86a80; color-scheme: dark; }
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.55 "Atkinson Hyperlegible", "Helvetica Neue", Arial, sans-serif; }
+  main { max-width: 1080px; margin: 0 auto; padding: 44px clamp(16px, 3vw, 36px) 64px; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.08; margin: 0 0 12px; }
+  h2 { font-size: 1.55rem; margin: 0 0 6px; }
+  h3 { font-size: 1.05rem; margin: 0 0 8px; }
+  .lede { font-size: 1.2rem; color: var(--soft); max-width: 62ch; margin: 0; }
+  .note { color: var(--soft); max-width: 70ch; margin: 0 0 16px; }
+  section { margin-top: 56px; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* the departures board */
+  .board { margin-top: 32px; background: var(--board); border-radius: 12px; padding: 18px clamp(12px, 2vw, 22px) 10px; color: #e9edf3; }
+  .board__head, .row { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 16px; align-items: start; }
+  .board__head { font: 700 0.78rem "Overpass Mono", ui-monospace, monospace; color: var(--amber-soft); letter-spacing: 0.08em;
+                 padding: 0 4px 10px; border-bottom: 1px solid #23324d; }
+  .row { padding: 14px 4px; border-bottom: 1px solid #1d2a42; }
+  .row:last-child { border-bottom: 0; }
+  .tweet { font-size: 1rem; }
+  .reply { margin-top: 8px; font-size: 0.92rem; color: #b8c3d4; border-left: 2px solid var(--amber); padding-left: 10px; }
+  .reply cite { font-style: normal; color: var(--amber-soft); font-family: "Overpass Mono", ui-monospace, monospace; font-size: 0.8rem; }
+  .status { display: flex; gap: 3px; flex-wrap: wrap; }
+  .status span { display: inline-block; min-width: 0.9em; padding: 3px 2px; background: var(--flap); color: var(--amber);
+                 font: 700 0.95rem "Overpass Mono", ui-monospace, monospace; text-align: center; border-radius: 2px;
+                 box-shadow: inset 0 -1px 0 #0a111d, inset 0 1px 0 #24344f; }
+  .row--human .status span { color: #ffffff; }
+  @media (max-width: 640px) { .board__head { display: none; } .row { grid-template-columns: 1fr; } }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; }
+  .card p { margin: 0 0 10px; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--rule); text-align: left; }
+  thead th { font-size: 0.84rem; color: var(--soft); font-weight: 700; vertical-align: bottom; }
+  tr.win td, tr.win th { font-weight: 700; }
+  .bar { display: inline-block; height: 8px; background: var(--ink); border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+  svg { width: 100%; height: auto; display: block; }
+  .axis { fill: var(--soft); font-size: 12px; font-family: inherit; }
+  .grid { stroke: var(--rule); }
+  .line { fill: none; stroke: var(--ink); stroke-width: 2.2; }
+  .line2 { fill: none; stroke: var(--amber-soft); stroke-width: 2.2; stroke-dasharray: 5 3; }
+  .flag { fill: var(--bad); }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.88rem; color: var(--soft); margin-top: 6px; }
+  .key { display: inline-block; width: 18px; height: 0; border-top: 2.5px solid var(--ink); vertical-align: 4px; margin-right: 6px; }
+  .key--2 { border-top: 2.5px dashed var(--amber-soft); }
+  ul.plain { padding-left: 20px; margin: 0; } ul.plain li { margin-bottom: 8px; max-width: 78ch; }
+  .foot { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--soft); font-size: 0.9rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Jetway: which team should answer this tweet?</h1>
+  <p class="lede">A triage service for an airline’s social media desk. It routes each message to a queue, hands uncertain ones to a person, and drafts a reply that can only say what the policy says. Trained and tested on 14,000 real customer tweets.</p>
+
+  <div class="board" aria-label="Example messages and where they were routed">
+    <div class="board__head"><span>MESSAGE AND DRAFTED REPLY</span><span>ROUTE</span></div>
+    <div id="feed"></div>
+  </div>
+
+  <section>
+    <h2>Did deep learning earn its place?</h2>
+    <p class="note">Tested on the last two days of data, after training on the first six. A neural network has to beat a strong classical model before it ships.</p>
+    <div class="scroll"><table id="models"></table></div>
+    <p class="note" id="models-note" style="margin-top:12px"></p>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <h3>When to hand off to a person</h3>
+      <p class="note">Automating only confident predictions trades volume for accuracy.</p>
+      <table id="coverage"></table>
+    </div>
+    <div class="card">
+      <h3>Does retrieval find the right policy?</h3>
+      <p class="note">30 hand-labeled questions. The classifier’s route helps retrieval.</p>
+      <table id="rag"></table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Would the monitor have noticed?</h2>
+    <p class="note">The model trained on Feb 16–19 only, then saw each later day as live traffic. The monitor watches the shift in predicted routes (PSI), which needs no labels. Accuracy needs labels a real desk only gets days later.</p>
+    <div class="card"><svg id="drift" viewBox="0 0 640 260" role="img" aria-label="Daily drift score and true accuracy"></svg>
+      <div class="legend"><span><i class="key"></i>Route shift (PSI), left axis</span><span><i class="key key--2"></i>True route F1, right axis</span></div>
+      <p class="note" id="drift-note" style="margin:8px 0 0"></p></div>
+  </section>
+
+  <section>
+    <h2>What went into it</h2>
+    <ul class="plain">
+      <li><strong>A label leak, found and fixed.</strong> Before release, someone replaced “cancel” and “late” with the label names inside the tweets (“Cancelled Flightled”, “Late Flightr”), in about 1,470 of them. The cleaning step reverses it.</li>
+      <li><strong>A time-based split.</strong> Random splits hide shifts like Feb 22’s disruption spike. Production models always predict on newer data than they trained on.</li>
+      <li><strong>Brands hidden.</strong> Airline handles become “@airline”, so the model learns complaints, not which airline had a bad week.</li>
+      <li><strong>Grounded drafts.</strong> Replies may cite only retrieved passages, and every dollar amount, mile count or time limit must appear in them. A person approves every reply before it posts.</li>
+      <li><strong>A small serving image.</strong> The champion is scikit-learn, so the Docker image has no TensorFlow. CI builds it and sends it real requests on every push.</li>
+    </ul>
+  </section>
+
+  <footer class="foot">Data: Twitter US Airline Sentiment, Figure Eight, CC BY-NC-SA 4.0. Policies are original and fictional. Code and full write-up in the repository.</footer>
+</main>
+<script type="module">
+const [exp, drift, rag, examples] = await Promise.all(["experiments.json", "drift_replay.json", "rag_eval.json", "examples.json"].map((f) => fetch(f).then((r) => r.json())));
+const pct = (v, d = 0) => `${(v * 100).toFixed(d)}%`;
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const flaps = (word) => [...word.toUpperCase().replace("_", " ")].map((ch) => `<span>${ch === " " ? "&nbsp;" : esc(ch)}</span>`).join("");
+
+document.getElementById("feed").innerHTML = examples.map((e) => `
+  <div class="row"><div><div class="tweet">${esc(e.tweet)}</div>
+    <div class="reply">${esc(e.reply)} <cite>[${e.citations.map(esc).join(", ")}]</cite></div></div>
+    <div class="status" aria-label="route ${esc(e.route)}">${flaps(e.route === "no_action" ? "thanks" : e.route)}</div></div>`).join("");
+
+const rows = [["TF-IDF + logistic regression (shipped)", exp.baseline, true], ["Bidirectional GRU, multi-task (Keras)", exp.network], ["Ensemble, 30% network", exp.ensemble_30_70]].filter((r) => r[1]);
+document.getElementById("models").innerHTML = `<thead><tr><th>Model</th><th class="num">Sentiment macro-F1</th><th class="num">Route macro-F1</th><th class="num">Route accuracy</th></tr></thead><tbody>` +
+  rows.map(([name, m, win]) => `<tr class="${win ? "win" : ""}"><th scope="row">${name}</th><td class="num">${m.sentiment.macro_f1.toFixed(3)}</td><td class="num">${m.route.macro_f1.toFixed(3)}</td><td class="num">${pct(m.route.accuracy, 1)}</td></tr>`).join("") + "</tbody>";
+if (exp.network) document.getElementById("models-note").textContent =
+  `The network stayed a challenger. The promotion rule needs a clear gain on routing, and it came in at ${(exp.network.route.macro_f1 - exp.baseline.route.macro_f1).toFixed(3)}. Trained from scratch on 7,000 tweets, it has too little data to beat TF-IDF; pretrained language representations are the next thing to try.`;
+
+document.getElementById("coverage").innerHTML = `<thead><tr><th>Hand off below</th><th class="num">Automated</th><th class="num">Accuracy on those</th></tr></thead><tbody>` +
+  exp.baseline.route.coverage.map((c) => `<tr class="${c.threshold === 0.5 ? "win" : ""}"><td>${c.threshold === 0 ? "never" : pct(c.threshold) + " confidence"}</td><td class="num">${pct(c.automated)}</td><td class="num">${pct(c.accuracy, 1)}</td></tr>`).join("") + "</tbody>";
+
+const ragRows = [["BM25 alone", rag.bm25], ["BM25 + predicted route", rag.bm25_with_predicted_route], ["BM25 + true route (ceiling)", rag.bm25_with_true_route]].filter((r) => r[1]);
+document.getElementById("rag").innerHTML = `<thead><tr><th>Retrieval</th><th class="num">Right policy first</th><th class="num">In top 3</th></tr></thead><tbody>` +
+  ragRows.map(([n, r], i) => `<tr class="${i === 1 ? "win" : ""}"><td>${n}</td><td class="num">${pct(r.hit_at_1)}</td><td class="num">${pct(r.hit_at_3)}</td></tr>`).join("") + "</tbody>";
+
+// drift chart
+const days = drift.days, W = 640, H = 260, L = 50, R = 50, T = 16, B = 34;
+const x = (i) => L + (W - L - R) * (i / (days.length - 1));
+const psiMax = 0.25, y1 = (v) => T + (H - T - B) * (1 - v / psiMax);
+const fLo = 0.5, fHi = 0.62, y2 = (v) => T + (H - T - B) * (1 - (v - fLo) / (fHi - fLo));
+const svg = document.getElementById("drift");
+svg.innerHTML = `
+  ${[0, 0.1, 0.2].map((v) => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y1(v)}" y2="${y1(v)}" ${v ? 'stroke-dasharray="3 3"' : ""}/><text class="axis" x="${L - 8}" y="${y1(v) + 4}" text-anchor="end">${v.toFixed(1)}</text>`).join("")}
+  <text class="axis" x="${W - R + 8}" y="${y2(0.6) + 4}">0.60</text><text class="axis" x="${W - R + 8}" y="${y2(0.55) + 4}">0.55</text>
+  <text class="axis" x="${L + 6}" y="${y1(0.1) - 6}">warn</text><text class="axis" x="${L + 6}" y="${y1(0.2) - 6}">alert</text>
+  <path class="line" d="${days.map((d, i) => `${i ? "L" : "M"}${x(i)},${y1(d.route_psi)}`).join(" ")}"/>
+  <path class="line2" d="${days.map((d, i) => `${i ? "L" : "M"}${x(i)},${y2(d.route_macro_f1)}`).join(" ")}"/>
+  ${days.map((d, i) => `<circle cx="${x(i)}" cy="${y1(d.route_psi)}" r="${d.status === "ok" ? 4 : 7}" class="${d.status === "ok" ? "" : "flag"}" fill="var(--ink)"/>
+     <text class="axis" x="${x(i)}" y="${H - 10}" text-anchor="middle">${new Date(d.day + "T12:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })}</text>`).join("")}`;
+const flagged = days.filter((d) => d.status !== "ok");
+const worst = days.reduce((a, b) => (b.route_macro_f1 < a.route_macro_f1 ? b : a));
+document.getElementById("drift-note").textContent = flagged.length
+  ? `Flagged: ${flagged.map((d) => d.day.slice(5).replace("-", "/")).join(", ")}. The worst day for real accuracy was ${worst.day.slice(5).replace("-", "/")} (F1 ${worst.route_macro_f1.toFixed(3)}), with ${pct(worst.true_disruption_share)} of tweets about disruptions. Average confidence barely moved all week, so it alone would have missed it.`
+  : "No day crossed the warning line.";
+</script>
+</body>
+</html>

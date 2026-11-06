@@ -1,0 +1,6 @@
+{
+ "kind": "keras_bigru_multitask",
+ "epochs_run": 4,
+ "train_days": "Feb 16-21",
+ "early_stopping_on": "Feb 22"
+}

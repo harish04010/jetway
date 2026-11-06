@@ -1,0 +1,11 @@
+{
+ "champion": "v1",
+ "versions": [
+  {
+   "version": "v1",
+   "run": "20261104-191214-baseline",
+   "promoted": true,
+   "reason": "no champion yet"
+  }
+ ]
+}

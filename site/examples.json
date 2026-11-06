@@ -1,0 +1,42 @@
+[
+ {
+  "tweet": "@united my bag never showed up in Denver and I have a meeting tomorrow",
+  "route": "baggage",
+  "reply": "Sorry about this. While a bag is delayed more than 12 hours, we reimburse reasonable essentials such as toiletries and a change of clothes, up to $50 per day for five days, with receipts. Send us a DM and we'll help.",
+  "citations": [
+   "baggage-delayed#3"
+  ],
+  "grounded": true,
+  "generator": "extractive"
+ },
+ {
+  "tweet": "@AmericanAir cancelled my flight and I am stuck at DFW overnight, do you cover a hotel?",
+  "route": "disruption",
+  "reply": "Sorry about this. If a cancellation within our control causes an overnight stay, we provide a hotel voucher, transport to the hotel, and a meal voucher. Send us a DM and we'll help.",
+  "citations": [
+   "cancellation-rebooking#3"
+  ],
+  "grounded": true,
+  "generator": "extractive"
+ },
+ {
+  "tweet": "@SouthwestAir paid for wifi and it never worked the whole flight",
+  "route": "service",
+  "reply": "Sorry about this. If seat power, wifi or entertainment didn't work on a flight, customers can request a refund of any wifi purchase and receive 2,500 loyalty miles for the inconvenience. Send us a DM and we'll help.",
+  "citations": [
+   "onboard-experience#1"
+  ],
+  "grounded": true,
+  "generator": "extractive"
+ },
+ {
+  "tweet": "@JetBlue thank you for the amazing crew on flight 431!",
+  "route": "no_action",
+  "reply": "Thank you for the kind words! We'd love to pass them on to the crew. Send us a DM with your flight number?",
+  "citations": [
+   "positive-feedback#1"
+  ],
+  "grounded": true,
+  "generator": "extractive"
+ }
+]

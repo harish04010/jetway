@@ -1,0 +1,4 @@
+{
+ "kind": "tfidf_logreg",
+ "train_days": "Feb 16-22"
+}

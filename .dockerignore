@@ -1,0 +1,10 @@
+data/
+runs/
+logs/
+results/
+notebooks/
+site/
+tests/
+.github/
+__pycache__/
+*.pyc

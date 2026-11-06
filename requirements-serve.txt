@@ -1,0 +1,9 @@
+# What the API needs at runtime. No TensorFlow: the champion model is scikit-learn.
+fastapi==0.115.6
+uvicorn==0.32.1
+pydantic==2.10.4
+scikit-learn==1.5.2
+joblib==1.4.2
+pandas==2.2.3
+numpy==2.0.2
+httpx==0.28.1

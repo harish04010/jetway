@@ -1,0 +1,108 @@
+{
+ "version": "v1",
+ "run": "20261104-191214-baseline",
+ "kind": "tfidf_logreg",
+ "trained_at": "2026-11-04",
+ "labels": {
+  "sentiment": [
+   "negative",
+   "neutral",
+   "positive"
+  ],
+  "route": [
+   "no_action",
+   "baggage",
+   "disruption",
+   "booking",
+   "service",
+   "general"
+  ]
+ },
+ "test_metrics": {
+  "sentiment": {
+   "accuracy": 0.7974897417330437,
+   "macro_f1": 0.7437294633066872,
+   "per_class_f1": {
+    "negative": 0.8704842428900845,
+    "neutral": 0.6524747205960617,
+    "positive": 0.7082294264339152
+   },
+   "coverage": [
+    {
+     "threshold": 0.0,
+     "automated": 1.0,
+     "accuracy": 0.7974897417330437
+    },
+    {
+     "threshold": 0.4,
+     "automated": 0.9908279024861212,
+     "accuracy": 0.8007308160779537
+    },
+    {
+     "threshold": 0.5,
+     "automated": 0.9357953174028482,
+     "accuracy": 0.8191900954346144
+    },
+    {
+     "threshold": 0.6,
+     "automated": 0.8305575669804489,
+     "accuracy": 0.8503342051729148
+    },
+    {
+     "threshold": 0.7,
+     "automated": 0.7270094134685011,
+     "accuracy": 0.8801460823373174
+    },
+    {
+     "threshold": 0.8,
+     "automated": 0.6159787593531257,
+     "accuracy": 0.905564263322884
+    }
+   ]
+  },
+  "route": {
+   "accuracy": 0.6719768283852281,
+   "macro_f1": 0.5880030567417257,
+   "per_class_f1": {
+    "no_action": 0.7634799867681111,
+    "baggage": 0.7094339622641509,
+    "disruption": 0.6799007444168734,
+    "booking": 0.3737704918032787,
+    "service": 0.691844114102049,
+    "general": 0.3095890410958904
+   },
+   "coverage": [
+    {
+     "threshold": 0.0,
+     "automated": 1.0,
+     "accuracy": 0.6719768283852281
+    },
+    {
+     "threshold": 0.4,
+     "automated": 0.907796282886797,
+     "accuracy": 0.7083222547194895
+    },
+    {
+     "threshold": 0.5,
+     "automated": 0.7704561911658219,
+     "accuracy": 0.7553258145363408
+    },
+    {
+     "threshold": 0.6,
+     "automated": 0.6263577118030412,
+     "accuracy": 0.7973025048169556
+    },
+    {
+     "threshold": 0.7,
+     "automated": 0.5030171373400917,
+     "accuracy": 0.845489443378119
+    },
+    {
+     "threshold": 0.8,
+     "automated": 0.38015930485155686,
+     "accuracy": 0.8717460317460317
+    }
+   ]
+  }
+ }
+}

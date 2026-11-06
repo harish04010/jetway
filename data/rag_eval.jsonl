@@ -1,0 +1,30 @@
+{"q": "@airline my bag didn't come off the belt in Denver, what do I do now", "doc": "baggage-delayed", "route": "baggage"}
+{"q": "@airline 2 days and still no suitcase. can I at least buy a toothbrush and get paid back?", "doc": "baggage-delayed", "route": "baggage"}
+{"q": "@airline how do I track my bag? I have a file number from the airport", "doc": "baggage-delayed", "route": "baggage"}
+{"q": "@airline it's been a week. my luggage is gone for good isn't it. how much do you pay for lost bags", "doc": "baggage-lost", "route": "baggage"}
+{"q": "@airline filed a claim for my lost bag 3 weeks ago and heard nothing", "doc": "baggage-lost", "route": "baggage"}
+{"q": "@airline my suitcase came back with a broken handle and a huge crack", "doc": "baggage-damaged", "route": "baggage"}
+{"q": "@airline the wheel snapped off my bag on the flight to Austin. who pays for this?", "doc": "baggage-damaged", "route": "baggage"}
+{"q": "@airline flight cancelled AGAIN. when is the next one and do you cover a hotel", "doc": "cancellation-rebooking", "route": "disruption"}
+{"q": "@airline you cancelled my flight and the rebooking is 2 days later, I want my money back", "doc": "cancellation-rebooking", "route": "disruption"}
+{"q": "@airline stuck overnight in Charlotte after the cancellation, nobody gave us a voucher", "doc": "cancellation-rebooking", "route": "disruption"}
+{"q": "@airline 4 hour delay for a maintenance issue, do I get anything for this?", "doc": "delay-compensation", "route": "disruption"}
+{"q": "@airline delayed again. what's the actual departure time? the app says nothing", "doc": "delay-compensation", "route": "disruption"}
+{"q": "@airline 3 hours on the tarmac, at least give us meal vouchers", "doc": "delay-compensation", "route": "disruption"}
+{"q": "@airline late inbound flight made me miss my connection in Dallas, now what", "doc": "missed-connection", "route": "disruption"}
+{"q": "@airline missed my connecting flight because you were late, do I have to wait in that huge line to rebook", "doc": "missed-connection", "route": "disruption"}
+{"q": "@airline can I change my flight to next Tuesday without a fee?", "doc": "booking-changes", "route": "booking"}
+{"q": "@airline booked yesterday by mistake, can I cancel and get a refund", "doc": "booking-changes", "route": "booking"}
+{"q": "@airline your website crashed at checkout and I don't know if my booking went through", "doc": "booking-website-errors", "route": "booking"}
+{"q": "@airline the app charged my card but I never got a confirmation email", "doc": "booking-website-errors", "route": "booking"}
+{"q": "@airline why can't I book reward travel, everything looks blacked out", "doc": "booking-website-errors", "route": "booking"}
+{"q": "@airline been on hold for 2 hours. is anyone answering the phones", "doc": "hold-times", "route": "service"}
+{"q": "@airline the check-in line at LAX is insane, I'm going to miss my flight", "doc": "hold-times", "route": "service"}
+{"q": "@airline the gate agent was incredibly rude to my mother", "doc": "crew-complaints", "route": "service"}
+{"q": "@airline your flight attendant yelled at a passenger for no reason, I want to report it", "doc": "crew-complaints", "route": "service"}
+{"q": "@airline paid for wifi and it never worked the whole flight", "doc": "onboard-experience", "route": "service"}
+{"q": "@airline my seat was broken and wouldn't recline for 5 hours", "doc": "onboard-experience", "route": "service"}
+{"q": "@airline no power outlets worked and the tv screen was dead", "doc": "onboard-experience", "route": "service"}
+{"q": "@airline miles from my last trip never posted to my account", "doc": "loyalty-status", "route": "general"}
+{"q": "@airline shoutout to Maria on flight 431, best crew ever!", "doc": "positive-feedback", "route": "no_action"}
+{"q": "@airline thank you for getting me home early, the team at the gate was amazing", "doc": "positive-feedback", "route": "no_action"}

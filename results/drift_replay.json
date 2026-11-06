@@ -1,0 +1,85 @@
+{
+ "trained_on": "2015-02-16 to 2015-02-19",
+ "days": [
+  {
+   "messages": 1478,
+   "route_psi": 0.0045,
+   "status": "ok",
+   "mean_confidence": 0.6473,
+   "confidence_drop": 0.14,
+   "oov_rate": 0.0507,
+   "biggest_shift": "no_action",
+   "biggest_shift_share": [
+    0.4223,
+    0.435
+   ],
+   "day": "2015-02-20",
+   "route_macro_f1": 0.5708,
+   "true_disruption_share": 0.1671
+  },
+  {
+   "messages": 1536,
+   "route_psi": 0.0845,
+   "status": "ok",
+   "mean_confidence": 0.6648,
+   "confidence_drop": 0.1225,
+   "oov_rate": 0.0455,
+   "biggest_shift": "no_action",
+   "biggest_shift_share": [
+    0.4223,
+    0.3014
+   ],
+   "day": "2015-02-21",
+   "route_macro_f1": 0.5766,
+   "true_disruption_share": 0.1979
+  },
+  {
+   "messages": 3053,
+   "route_psi": 0.1234,
+   "status": "warn",
+   "mean_confidence": 0.6513,
+   "confidence_drop": 0.1361,
+   "oov_rate": 0.0443,
+   "biggest_shift": "no_action",
+   "biggest_shift_share": [
+    0.4223,
+    0.2735
+   ],
+   "day": "2015-02-22",
+   "route_macro_f1": 0.5504,
+   "true_disruption_share": 0.2362
+  },
+  {
+   "messages": 2973,
+   "route_psi": 0.0266,
+   "status": "ok",
+   "mean_confidence": 0.6498,
+   "confidence_drop": 0.1376,
+   "oov_rate": 0.051,
+   "biggest_shift": "service",
+   "biggest_shift_share": [
+    0.256,
+    0.3199
+   ],
+   "day": "2015-02-23",
+   "route_macro_f1": 0.5567,
+   "true_disruption_share": 0.1487
+  },
+  {
+   "messages": 1170,
+   "route_psi": 0.0282,
+   "status": "ok",
+   "mean_confidence": 0.6339,
+   "confidence_drop": 0.1535,
+   "oov_rate": 0.0512,
+   "biggest_shift": "service",
+   "biggest_shift_share": [
+    0.256,
+    0.3282
+   ],
+   "day": "2015-02-24",
+   "route_macro_f1": 0.5563,
+   "true_disruption_share": 0.1154
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+# Deploys the API to AWS App Runner. Runs only when you trigger it by hand.
+# Setup steps are in deploy/aws/README.md. Not run by the author: it needs
+# your AWS account.
+name: deploy-aws
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # OIDC: GitHub proves who it is to AWS, so no long-lived keys in the repo
+  contents: read
+
+env:
+  AWS_REGION: us-east-2
+  ECR_REPOSITORY: jetway
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build and push the image
+        run: |
+          IMAGE=${{ steps.ecr.outputs.registry }}/$ECR_REPOSITORY:${{ github.sha }}
+          docker build -t $IMAGE .
+          docker push $IMAGE
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+      - name: Point App Runner at the new image
+        run: |
+          aws apprunner update-service \
+            --service-arn ${{ secrets.APP_RUNNER_SERVICE_ARN }} \
+            --source-configuration "ImageRepository={ImageIdentifier=$IMAGE,ImageRepositoryType=ECR,ImageConfiguration={Port=8000}},AutoDeploymentsEnabled=false,AuthenticationConfiguration={AccessRoleArn=${{ secrets.APP_RUNNER_ECR_ROLE_ARN }}}"

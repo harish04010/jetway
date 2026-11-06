@@ -1,0 +1,87 @@
+{
+ "sentiment": {
+  "accuracy": 0.7470432054067101,
+  "macro_f1": 0.6851779940859112,
+  "per_class_f1": {
+   "negative": 0.8389880368699745,
+   "neutral": 0.5660377358490566,
+   "positive": 0.6505082095387021
+  },
+  "coverage": [
+   {
+    "threshold": 0.0,
+    "automated": 1.0,
+    "accuracy": 0.7470432054067101
+   },
+   {
+    "threshold": 0.4,
+    "automated": 0.9913106444605359,
+    "accuracy": 0.7496956415875334
+   },
+   {
+    "threshold": 0.5,
+    "automated": 0.9283128167994207,
+    "accuracy": 0.7691107644305772
+   },
+   {
+    "threshold": 0.6,
+    "automated": 0.8095582910934106,
+    "accuracy": 0.8109719737626714
+   },
+   {
+    "threshold": 0.7,
+    "automated": 0.6852522326816317,
+    "accuracy": 0.8513561113067981
+   },
+   {
+    "threshold": 0.8,
+    "automated": 0.5515327057687666,
+    "accuracy": 0.8901531728665207
+   }
+  ]
+ },
+ "route": {
+  "accuracy": 0.6244267439053826,
+  "macro_f1": 0.5271819636350566,
+  "per_class_f1": {
+   "no_action": 0.7402473834443387,
+   "baggage": 0.6642728904847397,
+   "disruption": 0.639871382636656,
+   "booking": 0.2556390977443609,
+   "service": 0.6404751027866605,
+   "general": 0.2225859247135843
+  },
+  "coverage": [
+   {
+    "threshold": 0.0,
+    "automated": 1.0,
+    "accuracy": 0.6244267439053826
+   },
+   {
+    "threshold": 0.4,
+    "automated": 0.7960415158097996,
+    "accuracy": 0.7040630685263797
+   },
+   {
+    "threshold": 0.5,
+    "automated": 0.6560463432295438,
+    "accuracy": 0.7601177336276674
+   },
+   {
+    "threshold": 0.6,
+    "automated": 0.5496017378711079,
+    "accuracy": 0.797979797979798
+   },
+   {
+    "threshold": 0.7,
+    "automated": 0.46101858556601494,
+    "accuracy": 0.818848167539267
+   },
+   {
+    "threshold": 0.8,
+    "automated": 0.3555394641564084,
+    "accuracy": 0.8438560760353021
+   }
+  ]
+ }
+}
